@@ -6,10 +6,18 @@ import java.util.ArrayList;
 public class FileHandler {
     private final File root;
 
-    public FileHandler(String fileName) {
-        root = new File(fileName);
+    /**
+     * Конструктор обработчика директорий.
+     * @param rootPath Путь до корневой папки.
+     */
+    public FileHandler(String rootPath) {
+        root = new File(rootPath);
     }
 
+    /**
+     * Проверка корневой папки на корректность.
+     * @return true, если корневая папка существует и до неё есть доступ, false иначе.
+     */
     public boolean checkRoot() {
         try {
             if (!root.exists()) {
@@ -26,6 +34,12 @@ public class FileHandler {
         return true;
     }
 
+
+    /**
+     * Чтение текста из файла.
+     * @param file Файл, из которого нужно считать текст.
+     * @return Массив строк текста, если получилось открыть файл для чтения, null иначе.
+     */
     public static ArrayList<String> readFile(File file) {
         try (BufferedReader br = new BufferedReader(new FileReader(file.getAbsolutePath()))) {
             ArrayList<String> text = new ArrayList<>();
@@ -42,6 +56,9 @@ public class FileHandler {
         return null;
     }
 
+    /**
+     * Конкатенация файлов в топологическом порядке обхода.
+     */
     public void processFiles() {
         Graph graph = new Graph(root);
         ArrayList<String> sortedFiles = graph.new TopSort().getSorted();

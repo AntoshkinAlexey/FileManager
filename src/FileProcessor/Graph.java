@@ -6,15 +6,30 @@ import java.util.Collections;
 import java.util.HashMap;
 
 public class Graph {
+    /**
+     * Хранение списка смежности графа.
+     */
     private final HashMap<String, ArrayList<String>> edges;
+
+    /**
+     * Корневая папка.
+     */
     private final File root;
 
+    /**
+     * Создание графа.
+     * @param root Корневая папка.
+     */
     Graph(File root) {
         edges = new HashMap<>();
         this.root = root;
         getEdges(root);
     }
 
+    /**
+     * Получение всех рёбер графа.
+     * @param vertex Текущая вершина графа (файл).
+     */
     private void getEdges(File vertex) {
         File[] files = vertex.listFiles();
         if (files != null) {
@@ -31,6 +46,11 @@ public class Graph {
         }
     }
 
+    /**
+     * Поиск рёбер в тексте.
+     * @param text Текст, в котором нужно найти рёбра.
+     * @return Массив рёбер.
+     */
     private ArrayList<String> parseEdges(ArrayList<String> text) {
         ArrayList<String> files = new ArrayList<>();
         for (String line : text) {
@@ -55,11 +75,33 @@ public class Graph {
         return files;
     }
 
+    /**
+     * Класс, реализующий топологическую сортировку графа.
+     */
     class TopSort {
+        /**
+         * Хранение состояния вершины:
+         * 0 - не обработана
+         * 1 - начата обработка
+         * 2 - обработка закончена
+         */
         private final HashMap<String, Integer> state = new HashMap<>();
+
+        /**
+         * Массив, храящий топологическую сортировку графа.
+         */
         private final ArrayList<String> sortedFiles = new ArrayList<>();
+
+        /**
+         * Флаг, отвечающий за наличие циклов в графе.
+         * True, если есть цикл, false иначе.
+         */
         public boolean isCycle = false;
 
+        /**
+         * Обход графа в глубину.
+         * @param fileName Название файла.
+         */
         void dfs(String fileName) {
             state.put(fileName, 1);
             for (var ancestorFile : edges.get(fileName)) {
@@ -74,6 +116,10 @@ public class Graph {
             state.put(fileName, 2);
         }
 
+        /**
+         * Получение топологической сортировки графа.
+         * @return Массив названий файлов, которые отсортированы в топологическом порядке.
+         */
         public ArrayList<String> getSorted() {
             for (var fileName : edges.keySet()) {
                 state.put(fileName, 0);

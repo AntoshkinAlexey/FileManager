@@ -2,7 +2,14 @@ import FileProcessor.FileHandler;
 
 import java.util.Scanner;
 
+/**
+ * Точка входа.
+ */
 public class Main {
+    /**
+     * Точка входа.
+     * @param args Параметры терминала.
+     */
     public static void main(String[] args) {
         System.out.println("Welcome to File Manager!");
         Scanner scanner = new Scanner(System.in);
