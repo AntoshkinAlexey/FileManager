@@ -24,4 +24,12 @@ public class FileHandler {
         }
         return true;
     }
+
+    public void ProcessFiles() {
+        Graph graph = new Graph(root);
+        ArrayList<File> sortedFiles = graph.TopSort();
+        for (var file : sortedFiles) {
+            System.out.println(file);
+        }
+    }
 }

@@ -13,6 +13,9 @@ public class Main {
                     System.out.println("Попробуйте ещё раз.");
                     continue;
                 }
+                fileHandler.ProcessFiles();
+                System.out.println("Работа приложения закончена.");
+                break;
             } catch (Exception error) {
                 System.out.println("При вводе произошла ошибка, попробуйте ещё раз.");
             }
