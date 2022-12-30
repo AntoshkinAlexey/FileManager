@@ -1,34 +1,37 @@
+package FileProcessor;
+
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 public class Graph {
-    private HashMap<String, ArrayList<String>> edges;
-    private File root;
+    private final HashMap<String, ArrayList<String>> edges;
+    private final File root;
 
     Graph(File root) {
         edges = new HashMap<>();
         this.root = root;
-        GetEdges(root);
+        getEdges(root);
     }
 
-    private void GetEdges(File vertex) {
+    private void getEdges(File vertex) {
         File[] files = vertex.listFiles();
         if (files != null) {
             for (File file : files) {
                 if (file.isDirectory()) {
-                    GetEdges(file);
+                    getEdges(file);
                 } else {
-                    ArrayList<String> text = FileHandler.ReadFile(file);
+                    ArrayList<String> text = FileHandler.readFile(file);
                     if (text != null) {
-                        edges.put(file.getAbsolutePath(), ParseEdges(text));
+                        edges.put(file.getAbsolutePath(), parseEdges(text));
                     }
                 }
             }
         }
     }
 
-    private ArrayList<String> ParseEdges(ArrayList<String> text) {
+    private ArrayList<String> parseEdges(ArrayList<String> text) {
         ArrayList<String> files = new ArrayList<>();
         for (String line : text) {
             int position = 0;
@@ -38,7 +41,7 @@ public class Graph {
                 if (lastPosition != -1) {
                     try {
                         String filePath = line.substring(position, lastPosition);
-                        var file = new File(root.getAbsolutePath() + File.pathSeparator + filePath);
+                        var file = new File(root.getAbsolutePath() + File.separator + filePath);
                         if (file.exists()) {
                             files.add(file.getAbsolutePath());
                         }
@@ -53,36 +56,37 @@ public class Graph {
     }
 
     class TopSort {
-        private HashMap<String, Integer> state = new HashMap<String, Integer>();
-        private ArrayList<String> sortedFiles = new ArrayList<>();
+        private final HashMap<String, Integer> state = new HashMap<>();
+        private final ArrayList<String> sortedFiles = new ArrayList<>();
         public boolean isCycle = false;
 
-        void DFS(String fileName) {
+        void dfs(String fileName) {
             state.put(fileName, 1);
             for (var ancestorFile : edges.get(fileName)) {
                 if (state.get(ancestorFile) == 0) {
-                    DFS(ancestorFile);
+                    dfs(ancestorFile);
                 } else if (state.get(ancestorFile) == 1) {
                     isCycle = true;
-                    System.out.println("Cycle was found: " + fileName + " " + ancestorFile);
+                    System.out.println("Cycle was found: <" + fileName + "> and <" + ancestorFile + ">");
                 }
             }
-
             sortedFiles.add(fileName);
+            state.put(fileName, 2);
         }
 
-        public ArrayList<String> GetSorted() {
+        public ArrayList<String> getSorted() {
             for (var fileName : edges.keySet()) {
                 state.put(fileName, 0);
             }
             for (var fileName : edges.keySet()) {
                 if (state.get(fileName) == 0) {
-                    DFS(fileName);
+                    dfs(fileName);
                 }
             }
             if (isCycle) {
                 return null;
             }
+            Collections.reverse(sortedFiles);
             return sortedFiles;
         }
     }

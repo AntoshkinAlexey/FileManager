@@ -1,23 +1,25 @@
+import FileProcessor.FileHandler;
+
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Добро пожаловать в файловый менеджер!");
+        System.out.println("Welcome to File Manager!");
         Scanner scanner = new Scanner(System.in);
         while (true) {
-            System.out.println("Введите путь до корневой папки, которую хотите обработать: ");
+            System.out.print("Enter the path to the root folder you want to process: ");
             try {
                 String fileName = scanner.nextLine();
                 var fileHandler = new FileHandler(fileName);
-                if (fileHandler.CheckRoot()) {
-                    System.out.println("Попробуйте ещё раз.");
+                if (!fileHandler.checkRoot()) {
+                    System.out.println("Try again.");
                     continue;
                 }
-                fileHandler.ProcessFiles();
-                System.out.println("Работа приложения закончена.");
+                fileHandler.processFiles();
+                System.out.println("The END...");
                 break;
             } catch (Exception error) {
-                System.out.println("При вводе произошла ошибка, попробуйте ещё раз.");
+                System.out.println("An error occurred while typing, please try again.");
             }
         }
     }

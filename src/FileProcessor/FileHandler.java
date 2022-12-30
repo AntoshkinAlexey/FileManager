@@ -1,4 +1,5 @@
-import java.awt.*;
+package FileProcessor;
+
 import java.io.*;
 import java.util.ArrayList;
 
@@ -9,25 +10,24 @@ public class FileHandler {
         root = new File(fileName);
     }
 
-    public boolean CheckRoot() {
+    public boolean checkRoot() {
         try {
             if (!root.exists()) {
-                System.out.print("Такого пути не существует.");
+                System.out.println("There is no such path.");
                 return false;
             } else if (!root.isDirectory()) {
-                System.out.print("Необходимо ввести путь до папки, а не до файла.");
+                System.out.println("You must enter the path to the folder, not to the file.");
                 return false;
             }
         } catch (SecurityException error) {
-            System.out.println("У программы нет доступа к папке по данному пути.");
+            System.out.println("The program does not have access to the folder at this path.");
             return false;
         }
         return true;
     }
 
-    public static ArrayList<String> ReadFile(File file) {
-        try (FileInputStream fin = new FileInputStream(file.getAbsolutePath())) {
-            BufferedReader br = new BufferedReader(new InputStreamReader(fin));
+    public static ArrayList<String> readFile(File file) {
+        try (BufferedReader br = new BufferedReader(new FileReader(file.getAbsolutePath()))) {
             ArrayList<String> text = new ArrayList<>();
             String line;
             while ((line = br.readLine()) != null) {
@@ -42,15 +42,25 @@ public class FileHandler {
         return null;
     }
 
-    public void ProcessFiles() {
+    public void processFiles() {
         Graph graph = new Graph(root);
-        ArrayList<String> sortedFiles = graph.new TopSort().GetSorted();
+        ArrayList<String> sortedFiles = graph.new TopSort().getSorted();
         if (sortedFiles == null) {
             System.out.println("The graph contains cycles, concatenation is not possible.");
             return;
         }
-        for (var fileName : sortedFiles) {
-            System.out.println(ReadFile(new File(fileName)));
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter("output.txt"))) {
+            for (var fileName : sortedFiles) {
+                var text = readFile(new File(fileName));
+                if (text != null) {
+                    for (var line : text) {
+                        bw.write(line);
+                    }
+                }
+            }
+            System.out.println("\nSee the results in the output.txt\n");
+        } catch (IOException ex) {
+            System.out.println("Unable to open file for writing.");
         }
     }
 }
