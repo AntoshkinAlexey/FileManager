@@ -1,9 +1,9 @@
 import java.awt.*;
-import java.io.File;
+import java.io.*;
 import java.util.ArrayList;
 
 public class FileHandler {
-    private File root;
+    private final File root;
 
     public FileHandler(String fileName) {
         root = new File(fileName);
@@ -25,11 +25,32 @@ public class FileHandler {
         return true;
     }
 
+    public static ArrayList<String> ReadFile(File file) {
+        try (FileInputStream fin = new FileInputStream(file.getAbsolutePath())) {
+            BufferedReader br = new BufferedReader(new InputStreamReader(fin));
+            ArrayList<String> text = new ArrayList<>();
+            String line;
+            while ((line = br.readLine()) != null) {
+                text.add(line + System.lineSeparator());
+            }
+            return text;
+        } catch (SecurityException error) {
+            System.out.println("Unable to read file: " + file.getAbsolutePath());
+        } catch (IOException error) {
+            assert true;
+        }
+        return null;
+    }
+
     public void ProcessFiles() {
         Graph graph = new Graph(root);
-        ArrayList<File> sortedFiles = graph.TopSort();
-        for (var file : sortedFiles) {
-            System.out.println(file);
+        ArrayList<String> sortedFiles = graph.new TopSort().GetSorted();
+        if (sortedFiles == null) {
+            System.out.println("The graph contains cycles, concatenation is not possible.");
+            return;
+        }
+        for (var fileName : sortedFiles) {
+            System.out.println(ReadFile(new File(fileName)));
         }
     }
 }

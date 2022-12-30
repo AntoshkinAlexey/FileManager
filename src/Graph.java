@@ -1,13 +1,14 @@
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Objects;
 
 public class Graph {
     private HashMap<String, ArrayList<String>> edges;
+    private File root;
 
     Graph(File root) {
         edges = new HashMap<>();
+        this.root = root;
         GetEdges(root);
     }
 
@@ -18,7 +19,7 @@ public class Graph {
                 if (file.isDirectory()) {
                     GetEdges(file);
                 } else {
-                    ArrayList<String> text = ReadFile(file);
+                    ArrayList<String> text = FileHandler.ReadFile(file);
                     if (text != null) {
                         edges.put(file.getAbsolutePath(), ParseEdges(text));
                     }
@@ -37,7 +38,7 @@ public class Graph {
                 if (lastPosition != -1) {
                     try {
                         String filePath = line.substring(position, lastPosition);
-                        var file = new File(filePath);
+                        var file = new File(root.getAbsolutePath() + File.pathSeparator + filePath);
                         if (file.exists()) {
                             files.add(file.getAbsolutePath());
                         }
@@ -51,24 +52,38 @@ public class Graph {
         return files;
     }
 
-    private ArrayList<String> ReadFile(File file) {
-        try (FileInputStream fin = new FileInputStream(file.getAbsolutePath())) {
-            BufferedReader br = new BufferedReader(new InputStreamReader(fin));
-            ArrayList<String> text = new ArrayList<>();
-            String line;
-            while ((line = br.readLine()) != null) {
-                text.add(line + System.lineSeparator());
-            }
-            return text;
-        } catch (SecurityException error) {
-            System.out.println("Unable to read file: " + file.getAbsolutePath());
-        } catch (IOException error) {
-            assert true;
-        }
-        return null;
-    }
+    class TopSort {
+        private HashMap<String, Integer> state = new HashMap<String, Integer>();
+        private ArrayList<String> sortedFiles = new ArrayList<>();
+        public boolean isCycle = false;
 
-    ArrayList<File> TopSort() {
-        return new ArrayList<>();
+        void DFS(String fileName) {
+            state.put(fileName, 1);
+            for (var ancestorFile : edges.get(fileName)) {
+                if (state.get(ancestorFile) == 0) {
+                    DFS(ancestorFile);
+                } else if (state.get(ancestorFile) == 1) {
+                    isCycle = true;
+                    System.out.println("Cycle was found: " + fileName + " " + ancestorFile);
+                }
+            }
+
+            sortedFiles.add(fileName);
+        }
+
+        public ArrayList<String> GetSorted() {
+            for (var fileName : edges.keySet()) {
+                state.put(fileName, 0);
+            }
+            for (var fileName : edges.keySet()) {
+                if (state.get(fileName) == 0) {
+                    DFS(fileName);
+                }
+            }
+            if (isCycle) {
+                return null;
+            }
+            return sortedFiles;
+        }
     }
 }

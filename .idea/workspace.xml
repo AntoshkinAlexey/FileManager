@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="15b52720-4dc8-4fb4-83c9-9a51c3664b77" name="Changes" comment="added Graph.java&#10;added basic class structure in Graph.java">
+    <list default="true" id="15b52720-4dc8-4fb4-83c9-9a51c3664b77" name="Changes" comment="Implemented search for all edges of the graph.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/FileHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/FileHandler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Graph.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Graph.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -79,7 +80,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1672402173294</updated>
-      <workItem from="1672402174588" duration="9591000" />
+      <workItem from="1672402174588" duration="12035000" />
     </task>
     <task id="LOCAL-00001" summary="initial commit">
       <created>1672402394789</created>
@@ -102,7 +103,14 @@
       <option name="project" value="LOCAL" />
       <updated>1672407113187</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Implemented search for all edges of the graph.">
+      <created>1672420099115</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1672420099115</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -123,6 +131,7 @@
     <MESSAGE value="initial commit" />
     <MESSAGE value="added FileHandler.java&#10;added processing of the root folder" />
     <MESSAGE value="added Graph.java&#10;added basic class structure in Graph.java" />
-    <option name="LAST_COMMIT_MESSAGE" value="added Graph.java&#10;added basic class structure in Graph.java" />
+    <MESSAGE value="Implemented search for all edges of the graph." />
+    <option name="LAST_COMMIT_MESSAGE" value="Implemented search for all edges of the graph." />
   </component>
 </project>
