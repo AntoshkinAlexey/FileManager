@@ -5,6 +5,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
+
+/**
+ * Хранение и обработка графа каталога.
+ */
 public class Graph {
     /**
      * Хранение списка смежности графа.

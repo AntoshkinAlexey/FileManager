@@ -3,7 +3,13 @@ package FileProcessor;
 import java.io.*;
 import java.util.ArrayList;
 
+/**
+ * Обработка файлов.
+ */
 public class FileHandler {
+    /**
+     * Корневая папка.
+     */
     private final File root;
 
     /**
